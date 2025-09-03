@@ -1,3 +1,9 @@
+# Laden der Environment-Variablen
+from dotenv import load_dotenv
+import os
+load_dotenv()
+seed = int(os.getenv("PYTHONHASHSEED", 0))
+buffered = int(os.getenv("PYTHONBUFFERED", 0))
 # Eigene Bibliotheken
 from Bibliotheken.DataPreprocessingFunctions import *
 from Bibliotheken.DataAnalysisFunctions import *
@@ -14,16 +20,17 @@ os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 import tensorflow as tf
 from keras import layers
 from keras.callbacks import EarlyStopping
-# Für Reproduzierbarkeit
+# Für Reproduzierbarkeit der Trainingsergebnisse
 SEED = 1
-# 1. Python-Seed → Für Reproduzierbarkeit der Trainingsergebnisse!
+# 1. Python-Seed
 random.seed(SEED)
 # 2. NumPy-Seed
 np.random.seed(SEED)
 # 3. TensorFlow-Seed
 tf.random.set_seed(SEED)
 os.environ["PYTHONHASHSEED"] = "SEED"
-os.environ["TF_DETERMINISTIC_OPS"] = "1"  # Wichtig für deterministisches Verhalten auf CPU/GPU
+# Wichtig für deterministisches Verhalten auf CPU/GPU
+os.environ["TF_DETERMINISTIC_OPS"] = "1"
 #------------------------------------------------Beginn-----------------------------------------------------------
 Test_Data_file = "D:\\KI-Zusammenfassung\\Titanic - Machine Learning from Disaster\\test.csv"
 Train_Data_file = "D:\\KI-Zusammenfassung\\Titanic - Machine Learning from Disaster\\train.csv"

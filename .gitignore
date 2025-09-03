@@ -4,4 +4,3 @@ __pycache__/
 .vscode/
 *.h5
 *.pkl
-.env

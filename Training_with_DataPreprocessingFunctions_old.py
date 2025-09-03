@@ -1,3 +1,9 @@
+# Laden der Environment-Variablen
+from dotenv import load_dotenv
+import os
+load_dotenv()
+seed = int(os.getenv("PYTHONHASHSEED", 0))
+buffered = int(os.getenv("PYTHONBUFFERED", 0))
 # Eigene Bibliotheken
 from Bibliotheken.DataPreprocessingFunctionsVersion_old import *
 from Bibliotheken.DisplayFunctions import *
@@ -13,9 +19,9 @@ os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 import tensorflow as tf
 from keras import layers
 from keras.callbacks import EarlyStopping
-# Für Reproduzierbarkeit
+# Für Reproduzierbarkeit der Trainingsergebnisse
 SEED = 1
-# 1. Python-Seed → Für Reproduzierbarkeit der Trainingsergebnisse!
+# 1. Python-Seed
 random.seed(SEED)
 # 2. NumPy-Seed
 np.random.seed(SEED)

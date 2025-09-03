@@ -7,9 +7,8 @@ buffered = int(os.getenv("PYTHONBUFFERED", 0))
 # Eigene Bibliotheken
 from Bibliotheken.DataPreprocessingFunctionsVersion_old import *
 from Bibliotheken.DisplayFunctions import *
-import os, random, keras, matplotlib
-# Falls "Run with Python Console" in Configurations eingeschaltet ist
-matplotlib.use("Qt5Agg")
+# Allgemeine Bibliotheken
+import os, random, keras
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -27,7 +26,6 @@ random.seed(SEED)
 np.random.seed(SEED)
 # 3. TensorFlow-Seed
 tf.random.set_seed(SEED)
-os.environ["PYTHONHASHSEED"] = "SEED"
 # Wichtig für deterministisches Verhalten auf CPU/GPU
 os.environ["TF_DETERMINISTIC_OPS"] = "1"
 #---------------------------------------Beginn-------------------------------------------------

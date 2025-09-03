@@ -1,34 +1,28 @@
-# Laden der Environment-Variablen
-from dotenv import load_dotenv
-import os
-load_dotenv()
-seed = int(os.getenv("PYTHONHASHSEED", 0))
-buffered = int(os.getenv("PYTHONBUFFERED", 0))
 # Eigene Bibliotheken
 from Bibliotheken.DataPreprocessingFunctions import *
 from Bibliotheken.DataAnalysisFunctions import *
 from Bibliotheken.DisplayFunctions import *
 # Allgemeine Bibliotheken
-import os, random, keras
+import random
+import keras
+import os
 import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-from sklearn.model_selection import train_test_split
-# Informationen von TensorFlow in der Konsole ausschalten
-os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 import tensorflow as tf
 from keras import layers
 from keras.callbacks import EarlyStopping
-# Für Reproduzierbarkeit der Trainingsergebnisse
-SEED = 1
+from sklearn.model_selection import train_test_split
+# Für Reproduzierbarkeit
+seed = int(os.getenv("PYTHONHASHSEED", 0))
 # 1. Python-Seed
-random.seed(SEED)
+random.seed(seed)
 # 2. NumPy-Seed
-np.random.seed(SEED)
+np.random.seed(seed)
 # 3. TensorFlow-Seed
-tf.random.set_seed(SEED)
+tf.random.set_seed(seed)
 # Wichtig für deterministisches Verhalten auf CPU/GPU
 os.environ["TF_DETERMINISTIC_OPS"] = "1"
+# Informationen von TensorFlow in der Konsole ausschalten
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 #------------------------------------------------Beginn-----------------------------------------------------------
 Test_Data_file = "D:\\KI-Zusammenfassung\\Titanic - Machine Learning from Disaster\\test.csv"
 Train_Data_file = "D:\\KI-Zusammenfassung\\Titanic - Machine Learning from Disaster\\train.csv"
@@ -42,7 +36,7 @@ TestData.drop("PassengerId", axis=1, inplace=True)
 column_info = column_detection(TrainValData, TestData, 15, [])
 preproc_TrainValData, preproc_TestData = impute_columns(TrainValData, TestData, column_info,[])
 # Berechnung der Mutual-Information
-figure_mutualinfo = roughly_mutual_information(preproc_TrainValData, y, classification=True)
+figure_mutualinfo = roughly_mutual_information(preproc_TrainValData, y, classification=True, seed=seed)
 # Embedding Encoding für kategorische Features mit zu hoher Kardinalzahl
 for i in ["Name", "Ticket"]:
     preproc_TrainValData, preproc_TestData = encode_with_embedding(preproc_TrainValData,
@@ -56,9 +50,9 @@ preproc_TestData.drop(['Cabin', 'Cabin_was_missing'], axis=1, inplace=True)
 # skaliere Features
 preproc_TrainValData, preproc_TestData = scale_columns(preproc_TrainValData,preproc_TestData,
                                                        "Standard", "Age")
-# aufteilen der Trainingsdaten in
+# Aufteilen des Datensatzes
 preproc_TrainData, preproc_ValData, y_train, y_val = train_test_split(preproc_TrainValData, y,
-                                                                        test_size=0.3,random_state=SEED)
+                                                                        test_size=0.3,random_state=seed)
 # Trainingsparameter
 batchsize =80
 epochs = 300

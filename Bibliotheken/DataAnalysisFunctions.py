@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from sklearn.feature_selection import mutual_info_regression, mutual_info_classif
 
 
-def roughly_mutual_information(TrainData, Target, classification):
+def roughly_mutual_information(TrainData, Target, classification,seed):
     TrainDataCopy = TrainData.copy()
     # Zur Berechnung von mi bei category-Spalten, müssen diese Label-encoded werden
     # Label-Encoding der category-Spalten
@@ -29,9 +29,9 @@ def roughly_mutual_information(TrainData, Target, classification):
                    for dtype in TrainDataCopy.dtypes] '''
     discrete2 = TrainDataCopy.dtypes.isin(['int64', 'category', 'bool']).values
     if classification:
-        mi = mutual_info_classif(TrainDataCopy, Target, discrete_features=discrete2, random_state=0)
+        mi = mutual_info_classif(TrainDataCopy, Target, discrete_features=discrete2, random_state=seed, n_jobs=1)
     else:
-        mi = mutual_info_regression(TrainDataCopy, Target, discrete_features=discrete2, random_state=0)
+        mi = mutual_info_regression(TrainDataCopy, Target, discrete_features=discrete2, random_state=seed, n_jobs=1)
     mi = pd.Series(mi, name="MI Scores", index=TrainDataCopy.columns)
     # Mutual Information barplot
     mi = mi.sort_values(ascending=True)

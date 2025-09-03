@@ -19,13 +19,12 @@ import tensorflow as tf
 from keras import layers
 from keras.callbacks import EarlyStopping
 # Für Reproduzierbarkeit der Trainingsergebnisse
-SEED = 1
 # 1. Python-Seed
-random.seed(SEED)
+random.seed(seed)
 # 2. NumPy-Seed
-np.random.seed(SEED)
+np.random.seed(seed)
 # 3. TensorFlow-Seed
-tf.random.set_seed(SEED)
+tf.random.set_seed(seed)
 # Wichtig für deterministisches Verhalten auf CPU/GPU
 os.environ["TF_DETERMINISTIC_OPS"] = "1"
 #---------------------------------------Beginn-------------------------------------------------
@@ -45,7 +44,7 @@ preproc_TrainValData, preproc_TestData = simple_pipeline(TrainValData, TestData,
                                                                    50, ['Age'], [])
 # Aufteilen des Datensatzes
 preproc_TrainData, preproc_ValData, y_train, y_val = sk.model_selection.train_test_split(preproc_TrainValData, y,
-                                                                                         test_size=0.3,random_state=SEED)
+                                                                                         test_size=0.3,random_state=seed)
 # Trainingsparameter
 batchsize =80
 epochs = 300
@@ -54,7 +53,8 @@ patience=40
 # Modellarchitektur
 units = 64
 Titanic_KNN = keras.Sequential([
-    layers.Dense(input_shape=(preproc_TrainData.shape[1],), units=units, name="Input-layer"),
+    layers.Input(shape=(preproc_TrainData.shape[1],)),
+    layers.Dense(units=units, name="Input-layer"),
     #layers.BatchNormalization(),
     layers.Activation("relu"),
     #layers.Dropout(0.3),

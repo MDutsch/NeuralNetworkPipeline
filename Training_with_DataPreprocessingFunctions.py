@@ -24,10 +24,8 @@ os.environ["TF_DETERMINISTIC_OPS"] = "1"
 # Informationen von TensorFlow in der Konsole ausschalten
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 #------------------------------------------------Beginn-----------------------------------------------------------
-Test_Data_file = "D:\\KI-Zusammenfassung\\Titanic - Machine Learning from Disaster\\test.csv"
-Train_Data_file = "D:\\KI-Zusammenfassung\\Titanic - Machine Learning from Disaster\\train.csv"
-TestData = pd.read_csv(Test_Data_file)
-TrainValData = pd.read_csv(Train_Data_file)
+TestData = pd.read_csv("Datensaetze\\test.csv")
+TrainValData = pd.read_csv("Datensaetze\\train.csv")
 y = TrainValData["Survived"]
 TrainValData.drop("Survived", axis=1, inplace=True)
 TrainValData.drop("PassengerId", axis=1, inplace=True)

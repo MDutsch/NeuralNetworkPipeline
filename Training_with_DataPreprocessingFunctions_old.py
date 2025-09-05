@@ -28,10 +28,8 @@ tf.random.set_seed(seed)
 # Wichtig für deterministisches Verhalten auf CPU/GPU
 os.environ["TF_DETERMINISTIC_OPS"] = "1"
 #---------------------------------------Beginn-------------------------------------------------
-Test_Data_file = "D:\\KI-Zusammenfassung\\Titanic - Machine Learning from Disaster\\test.csv"
-Train_Data_file = "D:\\KI-Zusammenfassung\\Titanic - Machine Learning from Disaster\\train.csv"
-TestData = pd.read_csv(Test_Data_file)
-TrainValData = pd.read_csv(Train_Data_file)
+TestData = pd.read_csv("Datensaetze\\test.csv")
+TrainValData = pd.read_csv("Datensaetze\\train.csv")
 # Zielvariable y festlegen und in Trainingsdatenset entfernen
 y = TrainValData["Survived"]
 TrainValData.drop("Survived", axis=1, inplace=True)

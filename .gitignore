@@ -4,3 +4,5 @@ __pycache__/
 .vscode/
 *.h5
 *.pkl
+Datensaetze/*
+!Datensaetze/.gitkeep

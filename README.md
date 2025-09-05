@@ -5,6 +5,9 @@ auf dem TensorFlow (Keras) Framework basiert. Für das Training dieses Netzwerks
 Titanic-Kaggle-Datensatz verwendet, der vorverarbeitet wird, um die Daten für das Modell 
 optimal vorzubereiten.
 
+Weitere Details zur Entwicklung, den Hintergründen und den getroffenen Entscheidungen 
+finden sich in der begleitenden [Dokumentation](Projektdokumentation.pdf).  
+
 ---
 
 ## Installation
@@ -25,9 +28,9 @@ pip install -r requirements.txt
 
 ## Datensätze
 Die im Projekt verwendeten Kaggle-Datensaetze sind aus Lizenzgründen nicht im Repository gespeichert.
-Die benötigten Datensätze train.csv und test.csv müssen mit einem eigenen Kaggle-Profil von Kaggle unter 
-https://www.kaggle.com/c/titanic/data?select geladen werden (scrollen bis der Data Explorer, 
-nach dem Ende der Dataset Description, auf der rechten Seite erscheint).
+Die benötigten Datensätze **train.csv** und **test.csv** müssen mit einem eigenen Kaggle-Profil von 
+[Kaggle heruntergeladen werden](https://www.kaggle.com/c/titanic/data?select) geladen werden 
+(scrollen bis der Data Explorer, nach dem Ende der Dataset Description, auf der rechten Seite erscheint).
 Diese beiden Datensätze in den Unterordner Datensaetze des Projektordners in dieser Art ablegen:
 ````kotlin
 Datensaetze/
@@ -39,10 +42,11 @@ Datensaetze/
 ---
 
 ## Ausführung
-Im Projektordner sind zwei Skripte enthalten. Diese greifen auf die eigens entwickelten 
-Bibliotheken in dem Unterordner Bilbiotheken zu.
+Im Projektordner sind zwei Ausführungsskripte enthalten, welche jeweils eine unterschiedliche 
+Datenvorverarbeitung ausführen und dafür auf jeweils zwei unterschiedliche Datenvorverarbeitungs-Bibliotheken 
+zugreifen. Diese und alle anderen eigens entwickelten Bibliotheken befinden sich in dem Unterordner Bibliotheken.
 
-Das Training mit einer älteren Version der Datenvorverarbeitungs-Bibliothek lässt mit 
+Das Training mit einer älteren Version der Datenvorverarbeitungs-Bibliothek lässt sich mit 
 ````bash
 python Training_with_DataPreprocessingFunctions_old.py
 ````
@@ -56,7 +60,11 @@ ausführen.
 
 ---
 
-## Reproduzierbarkeit 
-Für die Reproduzierbarkeit der Trainingsergebnisse beider Ausführungsskripte sind die dafür benötigten 
-Environment-Variablen in der Datei .env gespeichert, welche durch beide Skripte aufgerufen wird.\
-In beiden Ausführungsskripten sind außerdem mehrere Codezeilen zur Sicherung der Reproduzierbarkeit enthalten.
+## Reproduzierbarkeit
+Für die Reproduzierbarkeit der Trainingsergebnisse sind die benötigten Environment-Variablen in der Datei **.env** hinterlegt, auf die beide Ausführungsskripte zugreifen.  
+Zusätzlich enthalten beide Skripte mehrere Codezeilen zur Sicherstellung der Reproduzierbarkeit.
+
+---
+
+## Lizenz
+Dieses Projekt steht unter der [MIT-Lizenz](LICENSE).

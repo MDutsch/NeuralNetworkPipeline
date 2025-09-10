@@ -66,16 +66,8 @@ Das Training mit der neuesten Version der Datenvorverarbeitungs-Bibliothek läss
 
 ```bash
 dotenv run -- python Training_with_DataPreprocessingFunctions.py
-<<<<<<< HEAD
 ````
 
-=======
-```
-<<<<<<< HEAD
->>>>>>> 0f91f8b (- Korrektur Readme)
-=======
-
->>>>>>> 08db65b (- Korrektur Readme)
 ausführen. Diese Bibliothek geht aus der Optimierung der älteren Version bezüglich Erweiterbarkeit, Übersichtlichkeit 
 sowie der Realisierung von Feature Engineering Prozessen, zwischen den Datenvorverarbeitungsprozessen, hervor. Hierbei wird für das Feature Engineering die Mutual Information zwischen den Features und dem Target
 berechnet, wofür in diesem Skript die Datenvorverarbeitungsprozesse einzeln ausgeführt sind. Für die berechnete 

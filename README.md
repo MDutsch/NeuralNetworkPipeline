@@ -1,10 +1,10 @@
 
 # NeuralNetworkPipeline
 
-Dieses Projekt dient zur vertiefenden Anwendung der Inhalte aus den abgeschlossenen Kaggle-Kursen, inbesondere den Kursen 
-**Intermediate Machine Learning**, **Deep Learning** und **Feature Engineering**.
+Dieses Projekt dient zur vertiefenden Anwendung der Inhalte aus den abgeschlossenen Kaggle-Kursen, inbesondere den 
+Kursen **Intermediate Machine Learning**, **Deep Learning** und **Feature Engineering**.
 Aus diesem Grund wird hier ein künstliches neuronales Netzwerk als ML-Modell gewählt und dafür
-eine Bibliothek zur Datenvorverarbeitung in Pipeline-Struktur entwickelt. 
+eine Bibliothek zur Datenvorverarbeitung für eine Pipeline entwickelt. 
 
 Weitere Details zur Entwicklung, den Hintergründen und den getroffenen Entscheidungen 
 finden sich in der begleitenden [Dokumentation](Projektdokumentation.pdf).
@@ -14,7 +14,7 @@ finden sich in der begleitenden [Dokumentation](Projektdokumentation.pdf).
 ## Installation
 
 1. Python 3.10+ empfohlen  
-2. Virtuelle Umgebung erstellen (optional, aber empfohlen):
+2. Virtuelle Umgebung erstellen:
 
 ```bash
 python -m venv venv
@@ -22,7 +22,7 @@ source venv/bin/activate   # Linux/macOS
 venv\Scripts\activate      # Windows
 ```
 
-3. Benötigte Pakete installieren
+3. Benötigte Pakete installieren:
 
 ```bash
 pip install -r requirements.txt
@@ -69,15 +69,17 @@ dotenv run -- python Training_with_DataPreprocessingFunctions.py
 ````
 
 ausführen. Diese Bibliothek geht aus der Optimierung der älteren Version bezüglich Erweiterbarkeit, Übersichtlichkeit 
-sowie der Realisierung von Feature Engineering Prozessen, zwischen den Datenvorverarbeitungsprozessen, hervor. Hierbei wird für das Feature Engineering die Mutual Information zwischen den Features und dem Target
-berechnet, wofür in diesem Skript die Datenvorverarbeitungsprozesse einzeln ausgeführt sind. Für die berechnete 
+sowie der Realisierung von Feature Engineering Prozessen, zwischen den Datenvorverarbeitungsprozessen, hervor. Hierbei 
+wird für das Feature Engineering die Mutual Information zwischen den Features und dem Target berechnet, 
+wofür in diesem Skript die Datenvorverarbeitungsprozesse einzeln ausgeführt sind. Für die berechnete 
 Mutual Information wird ein zusätzlicher Plot ausgegeben.
 
 ---
 
 ## Reproduzierbarkeit
 
-Für die Reproduzierbarkeit der Trainingsergebnisse sind die benötigten Environment-Variablen in der Datei **.env** hinterlegt, auf die beide Ausführungsskripte zugreifen.  
+Für die Reproduzierbarkeit der Trainingsergebnisse sind die benötigten Environment-Variablen in der Datei **.env** 
+hinterlegt, auf die beide Ausführungsskripte zugreifen.  
 Zusätzlich enthalten beide Skripte mehrere Codezeilen zur Sicherstellung der Reproduzierbarkeit.
 
 ---

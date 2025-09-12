@@ -13,16 +13,24 @@ finden sich in der begleitenden [Dokumentation](Projektdokumentation.pdf).
 
 ## Installation
 
-1. Python 3.10+ empfohlen  
-2. Virtuelle Umgebung erstellen:
+1. Python 3.10+ empfohlen
+2. Repository von GitHub klonen:
+
+```bash
+git clone https://github.com/MDutsch/NeuralNetworkPipeline.git
+cd NeuralNetworkPipeline
+```
+
+3. Virtuelle Umgebung erstellen:
 
 ```bash
 python -m venv venv
 source venv/bin/activate   # Linux/macOS
-venv\Scripts\activate      # Windows
+venv\Scripts\Activate.ps1  # Windows PowerShell
+venv\Scripts\activate.bat  # Windows cmd.exe
 ```
 
-3. Benötigte Pakete installieren:
+4. Benötigte Pakete installieren:
 
 ```bash
 pip install -r requirements.txt
@@ -66,7 +74,7 @@ Das Training mit der neuesten Version der Datenvorverarbeitungs-Bibliothek läss
 
 ```bash
 dotenv run -- python Training_with_DataPreprocessingFunctions.py
-````
+```
 
 ausführen. Diese Bibliothek geht aus der Optimierung der älteren Version bezüglich Erweiterbarkeit, Übersichtlichkeit 
 sowie der Realisierung von Feature Engineering Prozessen, zwischen den Datenvorverarbeitungsprozessen, hervor. Hierbei 

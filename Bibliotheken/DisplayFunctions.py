@@ -1,5 +1,6 @@
 # Hilfsfunktion zur Darstellung der Modellarchitektur
 import numpy as np
+from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from matplotlib.patches import FancyBboxPatch
@@ -28,7 +29,8 @@ def model_to_text_colored(model):
 
 
 def plot_training(model,stopper,train_history,epochs, batchsize,plot_title):
-    fig = plt.figure(figsize=(21,8))
+    #fig = plt.figure(figsize=(21,8))
+    fig=Figure(figsize=(21,8))
     gs = gridspec.GridSpec(2, 2, width_ratios=[2, 1], height_ratios=[3, 1])
     # Trainingsverlauf oben links platzieren
     ax1 = fig.add_subplot(gs[0, 0])  # oben links
@@ -103,6 +105,7 @@ def plot_training(model,stopper,train_history,epochs, batchsize,plot_title):
     box_height = 1 / (2 * maxlayers)
     # Farb-Festlegung
     color_dict = {
+        'InputLayer':"violet",
         'Dense': "lightgray",
         'BatchNormalization': "orange",
         'Dropout': "skyblue",
@@ -115,7 +118,10 @@ def plot_training(model,stopper,train_history,epochs, batchsize,plot_title):
         typeoflayer = str(layer.__class__.__name__)
         color = color_dict.get(typeoflayer)
         cfg = layer.get_config()
-        if typeoflayer == 'Dense':
+        if typeoflayer == 'InputLayer':
+            Text = ("Layer:" + typeoflayer + "| Input="
+                    + str(layer.batch_shape[1]))
+        elif typeoflayer == 'Dense':
             Text = ("Layer:"+typeoflayer +
                     "| Input=" + str(layer.input.shape[1]) +
                     "| Units=" + str(cfg["units"]) +

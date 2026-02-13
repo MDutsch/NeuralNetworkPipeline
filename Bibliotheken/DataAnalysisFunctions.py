@@ -1,10 +1,48 @@
+# Eigene Bibliotheken
+from Bibliotheken.DataPreprocessingFunctions import *
 import pandas as pd
-from pandas.api.types import (is_numeric_dtype)
 import sklearn
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import OrdinalEncoder
 from sklearn.feature_selection import mutual_info_regression, mutual_info_classif
-
+from pandas.api.types import is_float_dtype, is_integer_dtype, is_numeric_dtype
+#--------------------------------------------------------------------------------------------------
+# Hilfsfunktionen zur Datenverarbeitung
+def mutual_information(Data, Target, TargetType, maxcardhiddencat):
+    column_info = column_detection_universal(Data, maxcardhiddencat, [])
+    Data, impute_and_convert_info = impute_columns_train(Data, column_info,[])
+    cat_features=Data.select_dtypes(include=['category'])
+    for col in cat_features.columns:
+        if is_numeric_dtype(Data[col].cat.categories):
+            # numerische category-Spalten dürfen nicht encoded werden!
+            continue
+        else:
+            categoryvalues = set(Data[col].unique().astype(str))
+            categoryvalues = sorted(list(categoryvalues))
+            # generierte Kategorie-Werte Feature übergeben
+            Data[col] = Data[col].astype(str).astype(pd.CategoricalDtype(categories=categoryvalues))
+            # Encodierung
+            Encoder = OrdinalEncoder(categories=[categoryvalues])
+            Data[col] = Encoder.fit_transform(Data[[col]]).ravel().astype('int64')
+    discretFeatures=Data.dtypes.isin(['int64', 'category','bool']).values
+    if TargetType == 'discrete':
+        mi = mutual_info_classif(Data, Target, discrete_features=discretFeatures)
+    else:
+        mi = mutual_info_regression(Data, Target, discrete_features=discretFeatures)
+    mi = pd.Series(mi, name="MI Scores", index=Data.columns)
+    # Mutual Information barplot
+    mi = mi.sort_values(ascending=True)
+    width = np.arange(len(mi))
+    ticks = list(mi.index)
+    fig, ax = plt.subplots()
+    ax.barh(width, mi)
+    ax.set_yticks(width)
+    ax.set_yticklabels(ticks)
+    ax.set_title("Mutual Information Scores")
+    fig.tight_layout()
+    # Zeige fig im aufrufenden Script dann mit plt.show() an
+    plt.show()
 
 def roughly_mutual_information(TrainData, Target, classification,seed):
     TrainDataCopy = TrainData.copy()
@@ -22,11 +60,6 @@ def roughly_mutual_information(TrainData, Target, classification,seed):
             label_encoder.fit(categoryset)
             encoded_feature = label_encoder.transform(TrainDataCopy[col])
             TrainDataCopy[col] = encoded_feature
-    # Berechnung Mutual Information
-    ''' discrete1 = [pd.api.types.is_integer_dtype(dtype) or 
-                   pd.api.types.is_bool_dtype(dtype) or 
-                   isinstance(dtype, pd.CategoricalDtype) 
-                   for dtype in TrainDataCopy.dtypes] '''
     discrete2 = TrainDataCopy.dtypes.isin(['int64', 'category', 'bool']).values
     if classification:
         mi = mutual_info_classif(TrainDataCopy, Target, discrete_features=discrete2, random_state=seed, n_jobs=1)
@@ -45,10 +78,6 @@ def roughly_mutual_information(TrainData, Target, classification,seed):
     fig.tight_layout()
     # Zeige fig im aufrufenden Script dann mit plt.show() an
     return fig
-
-
-
-
 
 # Anzeige-Funktionen
 def show_cardinality(TrainData, TestData, Colnames, maxcard):

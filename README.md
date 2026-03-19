@@ -1,13 +1,13 @@
-
 # NeuralNetworkPipeline
+Dieses Projekt realisiert eine generalisierte Pipeline für neuronale Netzwerke auf Basis des Frameworks Keras (TensorFlow).
+Dabei soll mit dieser Pipeline das Training eines neuronalen Netzwerkes so kompakt und funktionell wie bei der 
+Pipeline-Funktion für klassische Machine-Learning-Modelle aus der Bibliothek scikit-learn durchgeführt werden.
+Die Pipeline übernimmt die Vorverarbeitung strukturierter Daten und trainiert damit das ausgewählte neuronale Netzwerk. 
+Vorhersagen mit der Pipeline können dabei autark von den Trainingsdaten durchgeführt werden.
+Die Pipeline ist objektorientiert in der Programmiersprache Python implementiert.
 
-Dieses Projekt dient zur vertiefenden Anwendung der Inhalte aus den abgeschlossenen Kaggle-Kursen, inbesondere den 
-Kursen **Intermediate Machine Learning**, **Deep Learning** und **Feature Engineering**.
-Aus diesem Grund wird hier ein künstliches neuronales Netzwerk als ML-Modell gewählt und dafür
-eine Bibliothek zur Datenvorverarbeitung für eine Pipeline entwickelt. 
 
-Weitere Details zur Entwicklung, den Hintergründen und den getroffenen Entscheidungen 
-finden sich in der begleitenden [Dokumentation](Projektdokumentation.pdf).
+Weitere Details finden sich in der begleitenden [Dokumentation](./Projektdokumentation.pdf).
 
 ---
 
@@ -43,8 +43,8 @@ pip install -r requirements.txt
 Die im Projekt verwendeten Kaggle-Datensaetze sind aus Lizenzgründen nicht im Repository gespeichert.
 Die benötigten Datensätze **train.csv** und **test.csv** müssen mit einem eigenen Kaggle-Profil von 
 [Kaggle heruntergeladen werden](https://www.kaggle.com/c/titanic/data?select) geladen werden 
-(scrollen bis der Data Explorer, nach dem Ende der Dataset Description, auf der rechten Seite erscheint).
-Diese beiden Datensätze in den Unterordner **Datensaetze** des Projektordners in dieser Art ablegen:
+(scrollen bis der Data Explorer nach dem Ende der Dataset Description auf der rechten Seite erscheint).
+Diese sind in den Unterordner **Datensaetze** des Projektordners wie folgt abzulegen:
 
 ```kotlin
 Datensaetze/
@@ -56,48 +56,32 @@ Datensaetze/
 ---
 
 ## Ausführung
-
-Im Projektordner sind zwei Ausführungsskripte enthalten, welche jeweils eine unterschiedliche 
-Datenvorverarbeitung ausführen und dafür auf jeweils unterschiedliche Versionen der Datenvorverarbeitungs-Bibliothek 
-zugreifen. Diese und alle anderen eigens entwickelten Bibliotheken befinden sich in dem Unterordner **Bibliotheken**.
-
-Beide Ausführungsskripte geben einen Plot mit dem Trainingsverlauf, Trainingsparameter und Modellarchitektur aus.
-Das Training mit einer älteren Version der Datenvorverarbeitungs-Bibliothek lässt sich mit 
-
+Zur Demonstration der Pipeline sind die zwei hier aufgelisteten Skripte nacheinander auszuführen.
+#### 1. Training
+Das erste Skript führt das Training über die Pipeline durch. Dabei wird das zu trainierende neuronale Netzwerk definiert 
+und mit dem Datensatz **train.csv** trainiert. Abschließend speichert das Skript die Pipeline, welche sowohl das 
+trainierte neuronale Netzwerk als auch die gelernten Transformation States enthält,in eine Joblib-Datei mit 
+dem Namen **Pipeline.joblib**.
+Das Skript lässt sich mit dem Befehl
 ```bash
-python Training_with_DataPreprocessingFunctions_old.py
+python Training_with_Pipeline.py
 ```
-
-ausführen. Hierbei ist die Datenvorverarbeitung in einer völlig automatisierten Pipeline ausgeführt.
-
-Das Training mit der neuesten Version der Datenvorverarbeitungs-Bibliothek lässt sich mit
-
+ausführen. 
+#### 2. Vorhersage
+Die Vorhersage mit den Testdaten **test.csv** erfolgt im zweiten Skript. Dieses lädt die Pipeline aus der 
+Datei **Pipeline.joblib** und führt damit die Vorhersage durch. 
+Das Skript lässt sich mit dem Befehl
 ```bash
-dotenv run -- python Training_with_DataPreprocessingFunctions.py
+python Prediction_with_Pipeline.py
 ```
-
-ausführen. Diese Bibliothek geht aus der Optimierung der älteren Version bezüglich Erweiterbarkeit, Übersichtlichkeit 
-sowie der Realisierung von Feature Engineering Prozessen, zwischen den Datenvorverarbeitungsprozessen, hervor. Hierbei 
-wird für das Feature Engineering die Mutual Information zwischen den Features und dem Target berechnet, 
-wofür in diesem Skript die Datenvorverarbeitungsprozesse einzeln ausgeführt sind. Für die berechnete 
-Mutual Information wird ein zusätzlicher Plot ausgegeben.
+ausführen.
 
 ---
-
 ## Reproduzierbarkeit
 
-Für die Reproduzierbarkeit der Trainingsergebnisse sind die benötigten Environment-Variablen in der Datei **.env** 
-hinterlegt, auf die beide Ausführungsskripte zugreifen.  
-Zusätzlich enthalten beide Skripte mehrere Codezeilen zur Sicherstellung der Reproduzierbarkeit.
-
----
-
-## Hinweis
-
-In den Versionen der Datenvorverarbeitungs-Bibliotheken erfolgen die Vorverarbeitungsprozesse auf einem 
-zusammengefassten Datensatz aus Trainings-, Validierungs- und Testdaten, wodurch Data Leakage entsteht, welcher die 
-Vorhersageergebnisse (Validierungsfehler) verzerren kann.
-In künftigen Versionen ist daher Data Leakage zu entfernen.
+Für die Reproduzierbarkeit der Ergebnisse sind die benötigten Umgebungsvariablen in der Datei **.env** 
+hinterlegt, auf die beide Ausführungsskripte zugreifen. Zusätzlich enthalten beide Skripte Konfigurationen zur 
+Sicherstellung der Reproduzierbarkeit.
 
 ---
 

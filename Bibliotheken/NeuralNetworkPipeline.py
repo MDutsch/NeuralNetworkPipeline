@@ -1,24 +1,20 @@
-import Bibliotheken.DataPreprocessingFunctions
 from Bibliotheken.DataPreprocessingFunctions import preprocess_train, preprocess_testval
-import Bibliotheken.DisplayFunctions
 from Bibliotheken.DisplayFunctions import plot_training
-import sklearn
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import joblib as jl
 
 class NeuralNetworkPipeline:
-
+    # Attribute
     _pipelinename=None
     _model=None
-
-    # Parameter für Trainingsalgorithmus
-    _stopper=None
+#-----------------------------------------------------------------------------------------------------------------------
+    # Optionen für den Trainingsalgorithmus
     _optimizer=None
     _loss=None
     _metrics=None
-
-    # Datenvorverarbeitungsinformationen
+#-----------------------------------------------------------------------------------------------------------------------
+    # Optionen für die Datenvorverarbeitung
     _maxcardhiddencat=None
     _maxcardcat=None
     _maxcardcat=None
@@ -29,11 +25,10 @@ class NeuralNetworkPipeline:
     _cols_for_manual_drop=None
     _cols_for_onehot=None
     _cols_for_embedding=None
-    _cols_for_scale=None
-    _scalers=None
+    _cols_and_scalers=None
     _separate_inputs=None
-
-    # Datenverarbeitungsinformationen
+#-----------------------------------------------------------------------------------------------------------------------
+    # Informationen für die Datenverarbeitung
     _columns_to_drop=None
     _manual_columns_to_drop=None
     _impute_and_convert_info=None
@@ -43,14 +38,17 @@ class NeuralNetworkPipeline:
     _output_dims=None
     _columnscalers_info=None
     _input_info = None
-
+#-----------------------------------------------------------------------------------------------------------------------
     # Trainingsergebnisse
     _train_chart=None
 
+#-----------------------------------------------------------------------------------------------------------------------
     # Konstruktor
     def __init__(self, name):
         self._name=name
 
+
+#-----------------------------------------------------------------------------------------------------------------------
     # Methoden
     # Ein- und Ausgabefunktionen
     def _set_name(self, name):
@@ -59,12 +57,30 @@ class NeuralNetworkPipeline:
     def _set_model(self, model):
         self._model=model
 
-    def _set_stopper(self, stopper):
-        self._stopper=stopper
+    def _show_required_input_shape(self, Data, Target, train_test_split_ratio):
+
+        y = Data[Target]
+        Data.drop(labels=Target, axis=1, inplace=True)
+        TrainData, ValData, y_train, y_val = train_test_split(Data, y, test_size=train_test_split_ratio)
+        (preproc_TrainData, columns_to_drop, manual_columns_to_drop, impute_and_convert_info, one_hot_encode_info,
+         embedding_info, input_dims, output_dims, columnscalers_info) = preprocess_train(TrainData,
+                                                                                         self._maxcardhiddencat,
+                                                                                         self._maxcardcat,
+                                                                                         self._maxmisspercent,
+                                                                                         self._detection_excep,
+                                                                                         self._drop_excep,
+                                                                                         self._impute_excep,
+                                                                                         self._cols_for_manual_drop,
+                                                                                         self._cols_for_onehot,
+                                                                                         self._cols_for_embedding,
+                                                                                         self._cols_and_scalers,)
+
+        return preproc_TrainData.shape
+
 
     def _show_trainchart(self):
         if self._train_chart is None:
-            print("Keine Figure gespeichert!")
+            print("Keine Bild gespeichert!")
             return
 
         dummy_fig = plt.figure(figsize=(21, 8))
@@ -74,6 +90,10 @@ class NeuralNetworkPipeline:
         self._train_chart.set_canvas(new_manager.canvas)
         plt.show()
 
+    def _save_pipeline_in_joblib(self):
+        jl.dump(self, self._name+'.joblib')
+
+#-----------------------------------------------------------------------------------------------------------------------
     # Trainings-Voreinstellungen
     def _set_trainalgo(self, optimizer, loss, metrics):
         self._optimizer=optimizer
@@ -86,7 +106,7 @@ class NeuralNetworkPipeline:
     def _set_preprocessing_options(self, maxcardhiddencat, maxcardcat, maxmisspercent,
                                           detection_excep, drop_excep, impute_excep,
                                           cols_for_manual_drop, cols_for_onehot, cols_for_embedding,
-                                          cols_for_scale, scalers):
+                                          cols_and_scalers):
         self._maxcardhiddencat=maxcardhiddencat
         self._maxcardcat=maxcardcat
         self._maxmisspercent=maxmisspercent
@@ -96,15 +116,11 @@ class NeuralNetworkPipeline:
         self._cols_for_manual_drop=cols_for_manual_drop
         self._cols_for_onehot=cols_for_onehot
         self._cols_for_embedding=cols_for_embedding
-        self._cols_for_scale=cols_for_scale
-        self._scalers=scalers
+        self._cols_and_scalers=cols_and_scalers
 
-    def _save_pipeline_in_joblib(self):
-        jl.dump(self, self._name+'.joblib')
-
+#-----------------------------------------------------------------------------------------------------------------------
     # Verarbeitungsfunktionen
-    def _train(self, Data, Target, train_test_split_ratio, batchsize, epochs):
-
+    def _train(self, Data, Target, train_test_split_ratio, batchsize, epochs, stopper):
         # Datenvorverarbeitung
         y = Data[Target]
         Data.drop(labels=Target, axis=1,inplace=True)
@@ -121,8 +137,7 @@ class NeuralNetworkPipeline:
                                                                                          self._cols_for_manual_drop,
                                                                                          self._cols_for_onehot,
                                                                                          self._cols_for_embedding,
-                                                                                         self._cols_for_scale,
-                                                                                         self._scalers)
+                                                                                         self._cols_and_scalers)
 
         self._columns_to_drop = columns_to_drop
         self._manual_columns_to_drop = manual_columns_to_drop
@@ -164,13 +179,13 @@ class NeuralNetworkPipeline:
         train_history = self._model.fit(TrainDataForFit,
                                         y_train,
                                         validation_data=(ValDataForFit, y_val),
-                                        callbacks=self._stopper,
+                                        callbacks=stopper,
                                         batch_size=batchsize,
                                         epochs=epochs)
 
         # Visualisierung des Trainingsverlaufs
-        self._train_chart = plot_training(self._model, self._stopper, train_history, epochs,
-                                        batchsize, "Trainingsergebnisse")
+        self._train_chart = plot_training(train_history, "Trainingsverlauf")
+
 
 
     def _predict(self, TestData):

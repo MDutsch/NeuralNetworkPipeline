@@ -1,10 +1,10 @@
-# Hilfsfunktion zur Darstellung der Modellarchitektur
+# Hilfsfunktion zur Darstellung
 import numpy as np
 from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from matplotlib.patches import FancyBboxPatch
-from textwrap import fill
+#-----------------------------------------------------------------------------------------------------------------------
+# Hilfsfunktionen
 def model_to_text_colored(model):
     lines = []
     colors = []
@@ -26,9 +26,38 @@ def model_to_text_colored(model):
         lines.append(line)
         colors.append(color)
     return lines, colors
+#-----------------------------------------------------------------------------------------------------------------------
+# Darstellungsfunktionen
+def plot_training(train_history,plot_title):
+    fig = Figure(figsize=(21, 8))
+    ax1 = fig.add_subplot(1, 1, 1)
+    # Auslesen der Epochen und des besten Validierungsfehlers
+    n_epochs_trained = len(train_history.history['loss'])
+    best_epoch = np.argmin(train_history.history['val_loss'])
+    best_val_loss = train_history.history['val_loss'][best_epoch]
+    loss = train_history.history['loss']
+    val_loss = train_history.history['val_loss']
+    # Darstellung des Diagramms
+    ax1.plot(loss, label='Train Loss')
+    ax1.plot(val_loss, label='Validation Loss')
+    ax1.axvline(x=best_epoch, linestyle='--', color='red')
+    ax1.text(0.95, 0.95,  ' Trainingsstopp nach '+str(n_epochs_trained)+' Epochen \n'+
+             f' Finaler Validierungsfehler: {best_val_loss:.4f}'+
+             f' bei Epoche {best_epoch}',
+             transform=ax1.transAxes, fontsize=12, va='top', ha='right',
+             bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+    ax1.set_title(plot_title,fontsize=14)
+    ax1.set_ylim(0, 1)
+    ax1.set_yticks([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+    ax1.set_ylabel('Loss',fontsize=14)
+    ax1.set_xlabel('Epoch',fontsize=14)
+    ax1.legend(fontsize=14)
+    ax1.grid(True)
+    fig.subplots_adjust(left=0.05, right=1, top=0.95, bottom=0.0)
+    fig.tight_layout()
+    return fig
 
-
-def plot_training(model,stopper,train_history,epochs, batchsize,plot_title):
+def plot_training_advanced(model,stopper,train_history,epochs, batchsize,plot_title):
     #fig = plt.figure(figsize=(21,8))
     fig=Figure(figsize=(21,8))
     gs = gridspec.GridSpec(2, 2, width_ratios=[2, 1], height_ratios=[3, 1])

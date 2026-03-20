@@ -13,7 +13,7 @@ Weitere Details finden sich in der begleitenden [Dokumentation](./Projektdokumen
 
 ## Installation
 
-1. Python 3.10+ empfohlen
+1. Python 3.10.x empfohlen (getestet 3.10.9)
 2. Repository von GitHub klonen:
 
 ```bash
@@ -24,7 +24,7 @@ cd NeuralNetworkPipeline
 3. Virtuelle Umgebung erstellen:
 
 ```bash
-python -m venv venv
+python3.10 -m venv venv
 source venv/bin/activate   # Linux/macOS
 venv\Scripts\Activate.ps1  # Windows PowerShell
 venv\Scripts\activate.bat  # Windows cmd.exe
@@ -33,7 +33,8 @@ venv\Scripts\activate.bat  # Windows cmd.exe
 4. Benötigte Pakete installieren:
 
 ```bash
-pip install -r requirements.txt
+python3.10 -m pip install --upgrade pip
+python3.10 -m pip install -r requirements.txt
 ```
 
 ---
@@ -64,7 +65,7 @@ trainierte neuronale Netzwerk als auch die gelernten Transformation States enth�
 dem Namen **Pipeline.joblib**.
 Das Skript lässt sich mit dem Befehl
 ```bash
-python Training_with_Pipeline.py
+python3.10 Training_with_Pipeline.py
 ```
 ausführen. 
 #### 2. Vorhersage
@@ -72,7 +73,7 @@ Die Vorhersage mit den Testdaten **test.csv** erfolgt im zweiten Skript. Dieses 
 Datei **Pipeline.joblib** und führt damit die Vorhersage durch. 
 Das Skript lässt sich mit dem Befehl
 ```bash
-python Prediction_with_Pipeline.py
+python3.10 Prediction_with_Pipeline.py
 ```
 ausführen.
 

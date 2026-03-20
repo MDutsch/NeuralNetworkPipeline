@@ -1,5 +1,6 @@
 joblib==1.5.3
-keras==3.13.2
+keras==3.12.1
+keras_nightly==3.12.0.dev2025100703
 matplotlib==3.10.8
 numpy==2.4.3
 pandas==3.0.1
